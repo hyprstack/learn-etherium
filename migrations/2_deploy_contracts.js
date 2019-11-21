@@ -1,5 +1,5 @@
 const SpmintToken = artifacts.require("SpmintToken");
 
 module.exports = function(deployer) {
-  deployer.deploy(SpmintToken);
+  deployer.deploy(SpmintToken, 1000000);
 };
