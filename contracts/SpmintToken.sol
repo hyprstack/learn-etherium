@@ -5,14 +5,16 @@ contract SpmintToken {
     // Set the total number of tokens
     // Read the total number of tokens
     uint256 public totalSupply; // declare a variable
-    mapping(address => uint256) public balanceOf; // mapping is an associative array - key:value store
+
     string public name = 'Spmint Token'; // add token name
     string public symbol = 'Spnt'; // add symbol
     string public standard = 'Spmint Token v1.0'; // add standard
 
+    mapping(address => uint256) public balanceOf; // mapping is an associative array - key:value store
+    mapping(address => mapping(address => uint256)) public allowance;
+
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
     event Approval(address indexed _owner, address indexed _spender, uint256 _value);
-    // allowance
 
     // is run at compile time - arguments are passed in at the migration definition
     constructor(uint256 _initialSupply) public {
@@ -39,11 +41,28 @@ contract SpmintToken {
     // Allow our account to approve a transfer
     function approve(address _spender, uint256 _value) public returns (bool success) {
         // set allowance
+        allowance[msg.sender][_spender] = _value;
 
         // trigger approve event
         emit Approval(msg.sender, _spender, _value);
 
         return true;
     }
+
     // Handle the delegated transfer - seal a transfer from one account to another without the sender initiating the action
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
+        // require _from has enough tokens
+        require(_value <= balanceOf[_from]);
+        // require allowance is big enough
+        require(_value <= allowance[_from][msg.sender]);
+        // call the transfer event
+        emit Transfer(_from, _to, _value);
+        // change the balance
+        balanceOf[_from] -= _value;
+        balanceOf[_to] += _value;
+        // update the allowance
+        allowance[_from][msg.sender] -= _value;
+        // return a boolean
+        return true;
+    }
 }
