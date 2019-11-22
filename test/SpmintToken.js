@@ -55,7 +55,7 @@ contract('SpmintToken', (accounts) => {
 
     const receipt = await tokenInstance.approve(accounts[1], 100);
     assert.equal(receipt.logs.length, 1, 'triggers one event');
-    assert.equal(receipt.logs[0].event, 'Approve', 'should be the "Approve" event');
+    assert.equal(receipt.logs[0].event, 'Approval', 'should be the "Approval" event');
     assert.equal(receipt.logs[0].args._owner, accounts[0], 'logs the account the tokens are from');
     assert.equal(receipt.logs[0].args._spender, accounts[1], 'logs the accounts the token are for');
     assert.equal(receipt.logs[0].args._value, 100, 'logs the transfer amount');

@@ -11,7 +11,7 @@ contract SpmintToken {
     string public standard = 'Spmint Token v1.0'; // add standard
 
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
-    event Approve(address indexed _owner, address indexed _spender, uint256 _value);
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
     // allowance
 
     // is run at compile time - arguments are passed in at the migration definition
@@ -41,7 +41,7 @@ contract SpmintToken {
         // set allowance
 
         // trigger approve event
-        emit Approve(msg.sender, _spender, _value);
+        emit Approval(msg.sender, _spender, _value);
 
         return true;
     }
