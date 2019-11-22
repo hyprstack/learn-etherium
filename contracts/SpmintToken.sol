@@ -11,6 +11,8 @@ contract SpmintToken {
     string public standard = 'Spmint Token v1.0'; // add standard
 
     event Transfer(address indexed _from, address indexed _to, uint256 _value);
+    event Approve(address indexed _owner, address indexed _spender, uint256 _value);
+    // allowance
 
     // is run at compile time - arguments are passed in at the migration definition
     constructor(uint256 _initialSupply) public {
@@ -32,4 +34,16 @@ contract SpmintToken {
         // Return a boolean
         return true;
     }
+
+    // Delegated Transfers
+    // Allow our account to approve a transfer
+    function approve(address _spender, uint256 _value) public returns (bool success) {
+        // set allowance
+
+        // trigger approve event
+        emit Approve(msg.sender, _spender, _value);
+
+        return true;
+    }
+    // Handle the delegated transfer - seal a transfer from one account to another without the sender initiating the action
 }

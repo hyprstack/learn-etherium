@@ -1,9 +1,12 @@
 const SpmintToken = artifacts.require('./SpmintToken.sol');
 
 contract('SpmintToken', (accounts) => {
-  it('initialises the contract with the correct values', async () => {
-    const tokenInstance = await SpmintToken.deployed();
+  let tokenInstance
+  before(async () => {
+    tokenInstance = await SpmintToken.deployed();
+  });
 
+  it('initialises the contract with the correct values', async () => {
     const name = await tokenInstance.name();
     assert.equal(name, 'Spmint Token', 'has the correct name');
 
@@ -15,8 +18,6 @@ contract('SpmintToken', (accounts) => {
   });
 
   it('allocates the inital supply upon deployment', async () => {
-    const tokenInstance = await SpmintToken.deployed();
-
     const totalSupply = await tokenInstance.totalSupply();
     assert.equal(totalSupply.toNumber(), 1000000, 'sets the total supply to 1,000,000');
 
@@ -25,8 +26,6 @@ contract('SpmintToken', (accounts) => {
   });
 
   it('transfers token ownership', async() => {
-    const tokenInstance = await SpmintToken.deployed();
-
     try {
       assert.fail(await tokenInstance.transfer.call(accounts[1], 9999999)); // using transfer.call does not trigger a transaction
     } catch (err) {
@@ -49,4 +48,16 @@ contract('SpmintToken', (accounts) => {
     const senderBalance = await tokenInstance.balanceOf(accounts[0]);
     assert.equal(senderBalance.toNumber(), 750000, 'deducts the amount from the sending account');
   });
+
+  it('approves tokens for delegated tansfer', async() => {
+    const success = await tokenInstance.approve.call(accounts[1], 100);
+    assert.equal(success, true, 'it returns true');
+
+    const receipt = await tokenInstance.approve(accounts[1], 100);
+    assert.equal(receipt.logs.length, 1, 'triggers one event');
+    assert.equal(receipt.logs[0].event, 'Approve', 'should be the "Approve" event');
+    assert.equal(receipt.logs[0].args._owner, accounts[0], 'logs the account the tokens are from');
+    assert.equal(receipt.logs[0].args._spender, accounts[1], 'logs the accounts the token are for');
+    assert.equal(receipt.logs[0].args._value, 100, 'logs the transfer amount');
+  })
 });
