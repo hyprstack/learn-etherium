@@ -69,9 +69,9 @@ contract('SpmintToken', (accounts) => {
     const toAccount = accounts[3];
     const spendingAccount = accounts[4];
     // Transfer some tokens
-    const initialTransferReceipt = await tokenInstance.transfer(fromAccount, 100, {from: accounts[0]});
+    await tokenInstance.transfer(fromAccount, 100, {from: accounts[0]});
     // Approve spendingAccount to spend 10 tokens from fromAccount
-    const approvedReceipt = await tokenInstance.approve(spendingAccount, 10, {from: fromAccount});
+    await tokenInstance.approve(spendingAccount, 10, {from: fromAccount});
 
     // Try transferring something larger than the sender's balance
     try {
