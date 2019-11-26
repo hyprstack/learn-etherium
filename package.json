@@ -1,0 +1,26 @@
+{
+  "name": "spmint-token-sale",
+  "version": "1.0.0",
+  "description": "Following the tutorial found at [Dapp University](https://youtu.be/XdKv5uwEk5A) - Token Sale ICO",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "dev": "lite-server -c configs/bs-config.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyprstack/learn-etherium.git"
+  },
+  "author": "hyprstack",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hyprstack/learn-etherium/issues"
+  },
+  "homepage": "https://github.com/hyprstack/learn-etherium#readme",
+  "devDependencies": {
+    "lite-server": "^2.5.4"
+  }
+}
