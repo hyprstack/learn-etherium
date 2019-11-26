@@ -62,4 +62,23 @@ contract('SpmintTokenSale', (accounts) => {
       assert(err.message.includes('revert'), 'cannot purchase more tokens than available');
     }
   });
+
+  it('ends token sale', async () => {
+    // try to end sale rom account other than the admin
+    try {
+      assert.fail(await tokenSaleInstance.endSale({from: buyer}));
+    } catch (err) {
+      assert(err.message.includes('revert'), 'must be admin to end sale');
+    }
+
+    const receipt = await tokenSaleInstance.endSale({from: admin});
+
+    const balance = await tokenInstance.balanceOf(admin);
+    assert.equal(balance.toNumber(), 999990, 'return all unsold tokens to admin');
+
+    // check that token price was set to 0 when selfdestruct was called
+    assert.equal(receipt.logs.length, 1, 'triggers one event');
+    assert.equal(receipt.logs[0].event, 'ConfirmSelfDestruct', 'should be the "ConfirmSelfDestruct" event');
+    assert.equal(receipt.logs[0].args.destroyed, true, 'confirms the destroyed event is true');
+  });
 });
